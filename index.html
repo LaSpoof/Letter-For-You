@@ -228,7 +228,7 @@
       transparent, transparent 27px,
       var(--letter-lines) 27px, var(--letter-lines) 28px
     );
-    top: 36px;
+    top: 34px;
   }
 
   /* ---- FULL LETTER OVERLAY ---- */
@@ -271,16 +271,17 @@
 
 .letter-content::before {
   content: '';
-  position: absolute; inset: 0;
+  position: absolute;
+  left: 0; right: 0;
+  top: 96px;
+  height: 1075px;
   background: repeating-linear-gradient(
     transparent, transparent 33px,
     var(--letter-lines) 33px, var(--letter-lines) 34px
   );
-  top: 96px;
   border-radius: 6px;
   pointer-events: none;
 }
-
 .letter-date {
   font-style: italic;
   color: var(--ink-light);
@@ -485,7 +486,7 @@
         To be your friend is a comforting relief <span style="color: #c084fc;">Bethany</span>
       </p>
       <p>
-        That night I was if "I'm trying to get with you", I told him no. 
+        That night I was asked if "I'm trying to get with you", I told him no. 
         However I did say I get it. I said "Beth is that <span style="color: #c084fc;">divine level of pretty</span> a man sees once, twice... maybe three times in his life if he's lucky.
         Any guy would be a <span style="color: #c084fc;">fool</span> to not fall for her." For weeks I've been convinving myself I am that <span style="color: #c084fc;">fool</span>
         Because how could you fall for me back? 
