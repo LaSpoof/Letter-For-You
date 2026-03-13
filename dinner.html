@@ -651,7 +651,7 @@
     if (!isDown) return;
     e.preventDefault();
     const x = e.pageX - track.offsetLeft;
-    track.scrollLeft = scrollLeft - (x - startX) * 1.2;
+    track.scrollLeft = scrollLeft - (x - startX) * 0.6;
   });
 
   // ---- Confirm ----
