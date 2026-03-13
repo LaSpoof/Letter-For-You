@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>When are you free?</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Petit+Formal+Script&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0b14;
+    --surface: #16131f;
+    --surface2: #1e1a2e;
+    --border: rgba(200, 160, 255, 0.12);
+    --accent: #c084fc;
+    --accent2: #e879f9;
+    --accent-glow: rgba(192, 132, 252, 0.25);
+    --text: #f0eaff;
+    --text-dim: rgba(240, 234, 255, 0.45);
+    --selected-bg: rgba(192, 132, 252, 0.18);
+    --selected-border: #c084fc;
+    --today: rgba(232, 121, 249, 0.12);
+    --red: #f87171;
+  }
+ 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+  body {
+    min-height: 100vh;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--text);
+    overflow-x: hidden;
+    padding: 24px 16px;
+    position: relative;
+  }
+ 
+  /* Ambient background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 20%, rgba(192, 132, 252, 0.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 80%, rgba(232, 121, 249, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+ 
+  /* Stars */
+  .stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.3); }
+  }
+ 
+  /* Page entry animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+ 
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeUp 0.7s ease forwards;
+  }
+ 
+  .script-label {
+    font-family: 'Petit Formal Script', cursive;
+    font-size: 17px;
+    color: var(--accent);
+    opacity: 0.8;
+    margin-bottom: 10px;
+    display: block;
+  }
+ 
+  .main-title {
+    font-size: clamp(42px, 8vw, 64px);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--text) 0%, var(--accent) 60%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+ 
+  .subtitle {
+    margin-top: 10px;
+    font-size: 16px;
+    color: var(--text-dim);
+    font-style: italic;
+    letter-spacing: 0.03em;
+  }
+ 
+  /* Main card */
+  .card {
+    width: 100%;
+    max-width: 720px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px;
+    box-shadow:
+      0 0 60px rgba(192, 132, 252, 0.06),
+      0 30px 80px rgba(0,0,0,0.4);
+    animation: fadeUp 0.7s ease 0.15s both forwards;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+ 
+  /* ---- CALENDAR ---- */
+  .calendar-section {
+    flex: 1;
+    min-width: 260px;
+  }
+ 
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+ 
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+ 
+  .cal-month {
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--text);
+  }
+ 
+  .cal-nav {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .cal-nav:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--selected-bg);
+  }
+ 
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+ 
+  .cal-day-name {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 4px 0 8px;
+  }
+ 
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--text);
+    position: relative;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+  }
+ 
+  .cal-day:hover:not(.empty):not(.past) {
+    background: var(--selected-bg);
+    border-color: rgba(192, 132, 252, 0.3);
+    color: var(--accent);
+  }
+ 
+  .cal-day.empty { cursor: default; }
+ 
+  .cal-day.past {
+    color: rgba(240, 234, 255, 0.2);
+    cursor: default;
+  }
+ 
+  .cal-day.today {
+    background: var(--today);
+    border-color: rgba(232, 121, 249, 0.3);
+    color: var(--accent2);
+  }
+ 
+  .cal-day.selected {
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.3), rgba(232, 121, 249, 0.2));
+    border-color: var(--selected-border);
+    color: var(--accent);
+    font-weight: 500;
+    box-shadow: 0 0 12px rgba(192, 132, 252, 0.25);
+  }
+ 
+  .cal-day.selected::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1px solid rgba(192, 132, 252, 0.2);
+  }
+ 
+  /* ---- RIGHT PANEL: time + summary ---- */
+  .right-panel {
+    width: 200px;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+ 
+  /* Time picker */
+  .time-section { }
+ 
+  .time-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 260px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .time-slots::-webkit-scrollbar { width: 3px; }
+  .time-slots::-webkit-scrollbar-track { background: transparent; }
+  .time-slots::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+ 
+  .time-slot {
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 15px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+    background: transparent;
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: 0.04em;
+  }
+  .time-slot:hover {
+    border-color: rgba(192, 132, 252, 0.4);
+    color: var(--accent);
+    background: var(--selected-bg);
+  }
+  .time-slot.selected {
+    border-color: var(--selected-border);
+    color: var(--accent);
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.2), rgba(232, 121, 249, 0.1));
+    box-shadow: 0 0 10px rgba(192, 132, 252, 0.15);
+  }
+ 
+  /* Selection summary */
+  .summary-box {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    background: var(--surface2);
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    transition: border-color 0.3s;
+  }
+  .summary-box.has-selection {
+    border-color: rgba(192, 132, 252, 0.3);
+  }
+  .summary-date {
+    font-family: 'Petit Formal Script', cursive;
+    font-size: 18px;
+    color: var(--accent);
+    line-height: 1.3;
+    min-height: 22px;
+    transition: all 0.3s;
+  }
+  .summary-time {
+    font-size: 14px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    min-height: 18px;
+    transition: all 0.3s;
+  }
+  .summary-placeholder {
+    font-size: 13px;
+    color: rgba(240, 234, 255, 0.2);
+    font-style: italic;
+    text-align: center;
+  }
+ 
+  /* Confirm button */
+  .confirm-btn {
+    margin-top: auto;
+    padding: 13px 0;
+    width: 100%;
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.15), rgba(232, 121, 249, 0.1));
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    color: var(--accent);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .confirm-btn.ready {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .confirm-btn.ready:hover {
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.3), rgba(232, 121, 249, 0.2));
+    box-shadow: 0 0 24px rgba(192, 132, 252, 0.3);
+    transform: translateY(-1px);
+  }
+  .confirm-btn.ready:active {
+    transform: translateY(0);
+  }
+ 
+  /* Responsive */
+  @media (max-width: 560px) {
+    .card { flex-direction: column; padding: 24px 20px; }
+    .right-panel { width: 100%; flex-direction: row; flex-wrap: wrap; gap: 16px; }
+    .time-section { flex: 1; min-width: 140px; }
+    .time-slots { flex-direction: row; flex-wrap: wrap; max-height: none; overflow: visible; }
+    .time-slot { flex: 0 0 auto; }
+    .summary-box { flex: 1; min-width: 140px; }
+    .confirm-btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+ 
+<div class="stars" id="stars"></div>
+ 
+<div class="header">
+  <span class="script-label">one more question ✦</span>
+  <h1 class="main-title">When are you free?</h1>
+  <p class="subtitle">Pick a day and a time that works for you</p>
+</div>
+ 
+<div class="card">
+ 
+  <!-- Calendar -->
+  <div class="calendar-section">
+    <div class="section-label">Choose a date</div>
+    <div class="cal-header">
+      <button class="cal-nav" id="prevBtn" onclick="changeMonth(-1)">‹</button>
+      <div class="cal-month" id="calMonth"></div>
+      <button class="cal-nav" id="nextBtn" onclick="changeMonth(1)">›</button>
+    </div>
+    <div class="cal-grid" id="calGrid">
+      <div class="cal-day-name">Su</div>
+      <div class="cal-day-name">Mo</div>
+      <div class="cal-day-name">Tu</div>
+      <div class="cal-day-name">We</div>
+      <div class="cal-day-name">Th</div>
+      <div class="cal-day-name">Fr</div>
+      <div class="cal-day-name">Sa</div>
+    </div>
+  </div>
+ 
+  <!-- Right panel -->
+  <div class="right-panel">
+ 
+    <!-- Time picker -->
+    <div class="time-section">
+      <div class="section-label">Choose a time</div>
+      <div class="time-slots" id="timeSlots"></div>
+    </div>
+ 
+    <!-- Summary -->
+    <div class="summary-box" id="summaryBox">
+      <div class="summary-placeholder" id="summaryPlaceholder">your answer will appear here ✦</div>
+      <div class="summary-date" id="summaryDate" style="display:none"></div>
+      <div class="summary-time" id="summaryTime" style="display:none"></div>
+    </div>
+ 
+    <!-- Confirm -->
+    <button class="confirm-btn" id="confirmBtn" onclick="handleConfirm()">
+      Continue →
+    </button>
+ 
+  </div>
+</div>
+ 
+<script>
+  // ---- Stars ----
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 0.5;
+    s.style.cssText = `
+      left: ${Math.random() * 100}vw;
+      top: ${Math.random() * 100}vh;
+      width: ${size}px; height: ${size}px;
+      animation-duration: ${2 + Math.random() * 4}s;
+      animation-delay: ${Math.random() * 5}s;
+      opacity: ${0.1 + Math.random() * 0.3};
+    `;
+    starsEl.appendChild(s);
+  }
+ 
+  // ---- Calendar state ----
+  const now = new Date();
+  let viewYear = now.getFullYear();
+  let viewMonth = now.getMonth();
+  let selectedDate = null;
+  let selectedTime = null;
+ 
+  const monthNames = ['January','February','March','April','May','June',
+    'July','August','September','October','November','December'];
+ 
+  function renderCalendar() {
+    const grid = document.getElementById('calGrid');
+    // Remove old day cells (keep day-name headers = first 7 children)
+    const children = [...grid.children];
+    children.slice(7).forEach(c => c.remove());
+ 
+    document.getElementById('calMonth').textContent =
+      monthNames[viewMonth] + ' ' + viewYear;
+ 
+    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+    const todayD = now.getDate(), todayM = now.getMonth(), todayY = now.getFullYear();
+ 
+    // Empty cells
+    for (let i = 0; i < firstDay; i++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day empty';
+      grid.appendChild(el);
+    }
+ 
+    for (let d = 1; d <= daysInMonth; d++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day';
+      el.textContent = d;
+ 
+      const isPast = (viewYear < todayY) ||
+        (viewYear === todayY && viewMonth < todayM) ||
+        (viewYear === todayY && viewMonth === todayM && d < todayD);
+ 
+      const isToday = d === todayD && viewMonth === todayM && viewYear === todayY;
+ 
+      if (isPast) {
+        el.classList.add('past');
+      } else {
+        if (isToday) el.classList.add('today');
+ 
+        // Mark selected
+        if (selectedDate &&
+          selectedDate.d === d &&
+          selectedDate.m === viewMonth &&
+          selectedDate.y === viewYear) {
+          el.classList.add('selected');
+        }
+ 
+        el.addEventListener('click', () => selectDate(d, viewMonth, viewYear, el));
+      }
+ 
+      grid.appendChild(el);
+    }
+ 
+    // Prev button disabled if in current or past month
+    const prevBtn = document.getElementById('prevBtn');
+    prevBtn.disabled = (viewYear === todayY && viewMonth <= todayM);
+    prevBtn.style.opacity = prevBtn.disabled ? '0.25' : '1';
+    prevBtn.style.cursor = prevBtn.disabled ? 'default' : 'pointer';
+  }
+ 
+  function changeMonth(dir) {
+    viewMonth += dir;
+    if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+    if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+    renderCalendar();
+  }
+ 
+  function selectDate(d, m, y, el) {
+    selectedDate = { d, m, y };
+    document.querySelectorAll('.cal-day.selected').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    updateSummary();
+  }
+ 
+  // ---- Time slots ----
+  const times = [
+    '10:00 AM', '11:00 AM', '12:00 PM',
+    '1:00 PM', '2:00 PM', '3:00 PM',
+    '5:00 PM', '6:00 PM', '7:00 PM', 
+    '8:00 PM', '9:00 PM', '10:00 PM'
+  ];
+ 
+  const timeSlotsEl = document.getElementById('timeSlots');
+  times.forEach(t => {
+    const el = document.createElement('div');
+    el.className = 'time-slot';
+    el.textContent = t;
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.time-slot.selected').forEach(s => s.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedTime = t;
+      updateSummary();
+    });
+    timeSlotsEl.appendChild(el);
+  });
+ 
+  // ---- Summary & confirm ----
+  function updateSummary() {
+    const placeholder = document.getElementById('summaryPlaceholder');
+    const dateEl = document.getElementById('summaryDate');
+    const timeEl = document.getElementById('summaryTime');
+    const box = document.getElementById('summaryBox');
+    const btn = document.getElementById('confirmBtn');
+ 
+    if (selectedDate || selectedTime) {
+      placeholder.style.display = 'none';
+      dateEl.style.display = 'block';
+      timeEl.style.display = 'block';
+      box.classList.add('has-selection');
+ 
+      if (selectedDate) {
+        const dateObj = new Date(selectedDate.y, selectedDate.m, selectedDate.d);
+        const opts = { weekday: 'long', month: 'long', day: 'numeric' };
+        dateEl.textContent = dateObj.toLocaleDateString('en-US', opts);
+      } else {
+        dateEl.textContent = '—';
+      }
+ 
+      timeEl.textContent = selectedTime ? '✦ ' + selectedTime : '';
+    } else {
+      placeholder.style.display = 'block';
+      dateEl.style.display = 'none';
+      timeEl.style.display = 'none';
+      box.classList.remove('has-selection');
+    }
+ 
+    if (selectedDate && selectedTime) {
+      btn.classList.add('ready');
+    } else {
+      btn.classList.remove('ready');
+    }
+  }
+ 
+  function handleConfirm() {
+    if (!selectedDate || !selectedTime) return;
+    // Pass selection to next page via URL params
+    const dateObj = new Date(selectedDate.y, selectedDate.m, selectedDate.d);
+    const dateStr = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    const params = new URLSearchParams({ date: dateStr, time: selectedTime });
+    window.location.href = 'flower.html?' + params.toString();
+  }
+ 
+  // Init
+  renderCalendar();
+</script>
+</body>
+</html>
