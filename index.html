@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,9 +24,9 @@
     --ink-light: #3a2260;
     --wax: #7c3aed;
   }
- 
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
- 
+
   body {
     min-height: 100vh;
     background: var(--bg);
@@ -39,30 +38,27 @@
     position: relative;
     color: var(--text);
   }
- 
+
   body::before {
     content: '';
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background:
       radial-gradient(ellipse at 15% 20%, rgba(192, 132, 252, 0.07) 0%, transparent 55%),
       radial-gradient(ellipse at 85% 80%, rgba(232, 121, 249, 0.06) 0%, transparent 50%),
       radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.04) 0%, transparent 70%);
     pointer-events: none;
   }
- 
+
   .stars { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
   .star {
-    position: absolute;
-    background: white;
-    border-radius: 50%;
+    position: absolute; background: white; border-radius: 50%;
     animation: twinkle ease-in-out infinite;
   }
   @keyframes twinkle {
     0%, 100% { opacity: 0.1; transform: scale(1); }
     50% { opacity: 0.7; transform: scale(1.3); }
   }
- 
+
   .particles { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
   .particle {
     position: absolute;
@@ -76,8 +72,7 @@
     90%  { opacity: 0.5; }
     100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
   }
- 
-  /* ---- SCENE ---- */
+
   .scene {
     perspective: 1200px;
     width: 360px;
@@ -85,18 +80,16 @@
     position: relative;
     cursor: pointer;
   }
- 
-  /* ---- ENVELOPE ---- */
+
   .envelope {
     width: 360px;
     height: 260px;
     position: relative;
     transform-style: preserve-3d;
   }
- 
+
   .envelope-body {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: linear-gradient(160deg, var(--env-mid) 0%, var(--env-face) 60%, var(--env-dark) 100%);
     border-radius: 4px 4px 8px 8px;
     border: 1px solid rgba(192, 132, 252, 0.18);
@@ -106,7 +99,7 @@
       inset 0 1px 0 rgba(192, 132, 252, 0.15);
     overflow: hidden;
   }
- 
+
   .envelope-body::before {
     content: '';
     position: absolute;
@@ -119,11 +112,10 @@
     background-position: left bottom, right bottom;
     background-repeat: no-repeat;
   }
- 
+
   .envelope-body::after {
     content: '';
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background:
       linear-gradient(to bottom right, rgba(140, 80, 220, 0.18) 49%, transparent 50%),
       linear-gradient(to bottom left,  rgba(140, 80, 220, 0.18) 49%, transparent 50%);
@@ -131,7 +123,7 @@
     background-position: left top, right top;
     background-repeat: no-repeat;
   }
- 
+
   .flap {
     position: absolute;
     top: 0; left: 0; right: 0;
@@ -141,22 +133,20 @@
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 10;
   }
- 
+
   .flap-face {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     overflow: hidden;
     border-radius: 4px 4px 0 0;
   }
- 
+
   .flap-face::before {
     content: '';
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: linear-gradient(160deg, #3d2b60 0%, var(--env-face) 55%, var(--env-dark) 100%);
     clip-path: polygon(0 0, 100% 0, 50% 100%);
   }
- 
+
   .seal {
     position: absolute;
     left: 50%; top: 78%;
@@ -165,14 +155,12 @@
     z-index: 20;
     transition: opacity 0.5s ease;
   }
- 
+
   .seal-circle {
     width: 52px; height: 52px;
     background: radial-gradient(circle at 35% 35%, #a855f7, var(--wax) 50%, #3b0764);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     box-shadow:
       0 2px 12px rgba(124, 58, 237, 0.5),
       0 0 24px rgba(192, 132, 252, 0.2),
@@ -180,19 +168,17 @@
     font-size: 22px;
     position: relative;
   }
- 
+
   .seal-circle::after {
     content: '';
-    position: absolute;
-    inset: 3px;
+    position: absolute; inset: 3px;
     border-radius: 50%;
     border: 1px solid rgba(255,255,255,0.15);
   }
- 
+
   .hint {
     position: absolute;
-    bottom: -42px;
-    left: 50%;
+    bottom: -42px; left: 50%;
     transform: translateX(-50%);
     color: var(--text-dim);
     font-size: 13px;
@@ -201,15 +187,15 @@
     white-space: nowrap;
     animation: pulse 2.5s ease-in-out infinite;
   }
- 
+
   @keyframes pulse {
     0%, 100% { opacity: 0.3; }
     50% { opacity: 0.8; }
   }
- 
+
   .scene.opened .flap { transform: rotateX(-175deg); }
   .scene.opened .seal { opacity: 0; pointer-events: none; }
- 
+
   .letter-wrapper {
     position: absolute;
     left: 20px; right: 20px; bottom: 12px;
@@ -220,12 +206,12 @@
     opacity: 0;
     pointer-events: none;
   }
- 
+
   .scene.opened .letter-wrapper {
     transform: translateY(-210px);
     opacity: 1;
   }
- 
+
   .letter-paper {
     width: 100%; height: 100%;
     background: var(--letter-bg);
@@ -234,7 +220,7 @@
     border: 1px solid rgba(192, 132, 252, 0.1);
     position: relative; overflow: hidden;
   }
- 
+
   .letter-paper::before {
     content: '';
     position: absolute; inset: 0;
@@ -244,7 +230,7 @@
     );
     top: 36px;
   }
- 
+
   /* ---- FULL LETTER OVERLAY ---- */
   .letter-page {
     position: fixed; inset: 0;
@@ -254,15 +240,15 @@
     transition: opacity 0.6s ease 0.1s;
     padding: 20px;
   }
- 
+
   .letter-page.visible { opacity: 1; pointer-events: all; }
- 
+
   .letter-page-bg {
     position: fixed; inset: 0;
     background: rgba(10, 7, 20, 0.93);
     backdrop-filter: blur(8px);
   }
- 
+
   .letter-content {
     position: relative; z-index: 2;
     width: 100%; max-width: 480px;
@@ -277,49 +263,47 @@
     max-height: 90vh;
     overflow-y: auto;
   }
- 
+
   @keyframes letterReveal {
     from { transform: translateY(30px) scale(0.96); opacity: 0; }
     to   { transform: translateY(0)    scale(1);    opacity: 1; }
   }
- 
-  .letter-content::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(
-      transparent, transparent 31px,
-      var(--letter-lines) 31px, var(--letter-lines) 32px
-    );
-    top: 88px;
-    border-radius: 6px;
-    pointer-events: none;
-  }
- 
-  .letter-date {
-    font-style: italic;
-    color: var(--ink-light);
-    font-size: 14px;
-    letter-spacing: 0.05em;
-    margin-bottom: 28px;
-    opacity: 0.65;
-  }
- 
-  .letter-salutation {
-    font-family: 'Petit Formal Script', cursive;
-    font-size: 28px;
-    color: var(--ink);
-    margin-bottom: 22px;
-    line-height: 1.3;
-  }
- 
-  .letter-body {
-    font-size: 17px;
-    line-height: 1.95;
-    color: var(--ink);
-    font-weight: 300;
-  }
-  .letter-body p { margin-bottom: 18px; }
- 
+
+.letter-content::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    transparent, transparent 33px,
+    var(--letter-lines) 33px, var(--letter-lines) 34px
+  );
+  top: 96px;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.letter-date {
+  font-style: italic;
+  color: var(--ink-light);
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  margin-bottom: 34px;
+  opacity: 0.65;
+}
+.letter-salutation {
+  font-family: 'Petit Formal Script', cursive;
+  font-size: 28px;
+  color: var(--ink);
+  margin-bottom: 34px;
+  line-height: 34px;
+}
+ .letter-body {
+  font-size: 17px;
+  line-height: 34px;
+  color: var(--ink);
+  font-weight: 300;
+}
+.letter-body p { margin-bottom: 34px; }
+
   .editable {
     border-bottom: 1.5px dashed rgba(192, 132, 252, 0.55);
     color: var(--accent);
@@ -333,7 +317,7 @@
   }
   .editable:focus { background: rgba(192, 132, 252, 0.07); }
   .editable:hover { background: rgba(192, 132, 252, 0.05); }
- 
+
   .letter-closing {
     font-family: 'Petit Formal Script', cursive;
     font-size: 22px;
@@ -341,51 +325,133 @@
     margin-top: 28px;
     margin-bottom: 8px;
   }
- 
+
   .letter-signature {
     font-family: 'Petit Formal Script', cursive;
     font-size: 26px;
     color: var(--ink);
     margin-left: 20px;
   }
- 
-  .continue-btn {
-    display: block;
-    margin: 36px auto 0;
-    padding: 13px 42px;
-    background: linear-gradient(135deg, rgba(192, 132, 252, 0.15), rgba(232, 121, 249, 0.1));
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 15px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: all 0.3s;
-  }
-  .continue-btn:hover {
-    background: linear-gradient(135deg, rgba(192, 132, 252, 0.3), rgba(232, 121, 249, 0.2));
-    box-shadow: 0 0 24px rgba(192, 132, 252, 0.3);
-    transform: translateY(-1px);
-  }
-  .continue-btn:active { transform: translateY(0); }
- 
+
   .edit-hint {
     text-align: center;
     font-size: 11px;
     letter-spacing: 0.18em;
     color: rgba(192, 132, 252, 0.45);
     text-transform: uppercase;
-    margin-top: 16px;
+    margin-top: 20px;
+    margin-bottom: 4px;
+  }
+
+  /* ---- CHECKBOX ROW ---- */
+  .checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: 28px;
+    gap: 12px;
+    position: relative;
+  }
+
+  /* Each option: checkbox on outside, label inward */
+  .check-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    flex: 1;
+  }
+
+  /* No Thank You — checkbox on LEFT, label to the right (toward center) */
+  .check-option.no {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  /* What's For Dinner — label to the left (toward center), checkbox on RIGHT */
+  .check-option.yes {
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+  }
+
+  /* Hide the native checkbox */
+  .check-option input[type="checkbox"] {
+    display: none;
+  }
+
+  /* Custom checkbox box */
+  .check-box {
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid rgba(160, 120, 220, 0.45);
+    border-radius: 4px;
+    background: rgba(192, 132, 252, 0.04);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .check-box::after {
+    content: '';
+    width: 5px;
+    height: 9px;
+    border-right: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    transform: rotate(45deg) scale(0);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    margin-top: -2px;
+  }
+
+  .check-option:hover .check-box {
+    border-color: var(--accent);
+    background: rgba(192, 132, 252, 0.08);
+  }
+
+  .check-option.checked .check-box {
+    border-color: var(--accent);
+    background: rgba(192, 132, 252, 0.15);
+    box-shadow: 0 0 10px rgba(192, 132, 252, 0.25);
+  }
+
+  .check-option.checked .check-box::after {
+    transform: rotate(45deg) scale(1);
+  }
+
+  /* Labels */
+  .check-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    color: var(--ink-light);
+    line-height: 1.3;
+    transition: color 0.2s;
+  }
+
+  .check-option.checked .check-label {
+    color: var(--ink);
+  }
+
+  /* Divider between the two options */
+  .checkbox-row::before {
+    content: '✦';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    color: rgba(160, 120, 220, 0.3);
+    pointer-events: none;
   }
 </style>
 </head>
 <body>
- 
+
 <div class="stars" id="stars"></div>
 <div class="particles" id="particles"></div>
- 
+
 <div class="scene" id="scene" onclick="openEnvelope()">
   <div class="envelope">
     <div class="envelope-body"></div>
@@ -395,43 +461,66 @@
   </div>
   <div class="hint">click to open</div>
 </div>
- 
+
 <div class="letter-page" id="letterPage">
   <div class="letter-page-bg"></div>
   <div class="letter-content">
     <div class="letter-date">March, 2026</div>
- 
-    <div class="letter-salutation">Dear <span class="editable" contenteditable="true" data-placeholder="their name">their name</span>,</div>
- 
+
+    <div class="letter-salutation">Dear <span style="color: #c084fc;">Bethany</span>,</div>
+
     <div class="letter-body">
       <p>
-        I've been trying to find the right words for a while now —
-        and I'm not sure I'll ever say this perfectly, so I figured
-        a letter was worth a try.
+          I'm not sure I could ever phrase this correctly if I were to speak it outloud. 
+        So I hope this digital letter is a good attempt instead.
       </p>
       <p>
-        I really love <span class="editable" contenteditable="true" data-placeholder="something you love about them">something you love about them</span>,
-        and the way you <span class="editable" contenteditable="true" data-placeholder="something they do">something they do</span>.
-        Honestly, <span class="editable" contenteditable="true" data-placeholder="a memory or feeling">a memory or feeling</span>.
+        I have the biggest <span style="color: #c084fc;">crush</span> on you.
+        The stupid school playground kind of crush where just getting the chance to even hold your hand would be surreal.
+        When you're around it feels as though youir energy eminates joy & kindness in their purest forms; <span style="color: #c084fc;">As though the sun itself is speaking to me</span>.
       </p>
       <p>
-        I know this might be a little unexpected, but I think
-        you're really <span class="editable" contenteditable="true" data-placeholder="a word for them">a word for them</span>,
-        and I'd love the chance to get to know you even better — maybe over
-        <span class="editable" contenteditable="true" data-placeholder="coffee / dinner / a walk">coffee / dinner / a walk</span>?
+        I love the confidence you have in your unique style, & how well your outfits compliment your personality.
+        The way you speak of friends & family tells me how kind & loving you are to those you care for, & that comforts me; 
+        To be your friend is a comforting relief <span style="color: #c084fc;">Bethany</span>
       </p>
-      <p>No pressure at all. Just thought you deserved to know. 🤍</p>
+      <p>
+        That night I was if "I'm trying to get with you", I told him no. 
+        However I did say I get it. I said "Beth is that <span style="color: #c084fc;">divine level of pretty</span> a man sees once, twice... maybe three times in his life if he's lucky.
+        Any guy would be a <span style="color: #c084fc;">fool</span> to not fall for her." For weeks I've been convinving myself I am that <span style="color: #c084fc;">fool</span>
+        Because how could you fall for me back? 
+        Not to mention D&D would be pretty awkward if something happened between us.
+      </p>
+      <p>
+        I know this is a lot, and I meant all of it. <span style="color: #c084fc;">🤍</span>
+        I would love if you joined me for <span style="color: #c084fc;">dinner</span> so we may yap more, with some yummy food and good vibes?
+      </p>
     </div>
- 
-    <div class="letter-closing">With all my heart,</div>
-    <div class="letter-signature"><span class="editable" contenteditable="true" data-placeholder="your name">your name</span></div>
- 
-    <div class="edit-hint">✦ click the purple text to edit ✦</div>
- 
-    <button class="continue-btn" onclick="handleContinue()">Continue &nbsp;→</button>
+
+    <div class="letter-closing">✦Sincerly,</div>
+    <div class="letter-signature"><span style="color: #c084fc;">Ayden</span>✦</div>
+
+    <!-- CHECKBOX ROW -->
+    <div class="checkbox-row">
+
+      <!-- Left: No Thank You — checkbox on far left, label toward center -->
+      <div class="check-option no" id="optNo" onclick="handleCheck('no')">
+        <input type="checkbox" id="checkNo">
+        <div class="check-box"></div>
+        <span class="check-label">No Thank You</span>
+      </div>
+
+      <!-- Right: What's For Dinner — label toward center, checkbox on far right -->
+      <div class="check-option yes" id="optYes" onclick="handleCheck('yes')">
+        <input type="checkbox" id="checkYes">
+        <div class="check-box"></div>
+        <span class="check-label">What's For Dinner?</span>
+      </div>
+
+    </div>
   </div>
 </div>
- 
+
 <script>
   // Stars
   const starsEl = document.getElementById('stars');
@@ -442,7 +531,7 @@
     s.style.cssText = `left:${Math.random()*100}vw;top:${Math.random()*100}vh;width:${size}px;height:${size}px;animation-duration:${2+Math.random()*4}s;animation-delay:${Math.random()*5}s;opacity:${0.1+Math.random()*0.3};`;
     starsEl.appendChild(s);
   }
- 
+
   // Particles
   const symbols = ['✦','♡','✧','·','°','✿','❧'];
   const container = document.getElementById('particles');
@@ -457,7 +546,8 @@
     p.style.opacity  = (0.1 + Math.random() * 0.25);
     container.appendChild(p);
   }
- 
+
+  // Envelope
   let opened = false;
   function openEnvelope() {
     if (opened) return;
@@ -467,11 +557,35 @@
     scene.style.cursor = 'default';
     setTimeout(() => document.getElementById('letterPage').classList.add('visible'), 1200);
   }
- 
-  function handleContinue() {
-    window.location.href = 'dinner.html';
+
+  // Checkboxes
+  function handleCheck(choice) {
+    const optNo  = document.getElementById('optNo');
+    const optYes = document.getElementById('optYes');
+
+    if (choice === 'no') {
+      optNo.classList.toggle('checked');
+      optYes.classList.remove('checked');
+      // Small delay so they see the check before navigating away
+      if (optNo.classList.contains('checked')) {
+        setTimeout(() => {
+          // "No" response — you can change this destination
+          alert("That's okay! No pressure at all. 🤍");
+          window.location.href = 'no-thanks.html';
+        }, 400);
+      }
+    } else {
+      optYes.classList.toggle('checked');
+      optNo.classList.remove('checked');
+      if (optYes.classList.contains('checked')) {
+        setTimeout(() => {
+          window.location.href = 'dinner.html';
+        }, 400);
+      }
+    }
   }
- 
+
+  // Editables
   document.querySelectorAll('.editable').forEach(el => {
     el.addEventListener('focus', function() {
       if (this.textContent.trim() === this.dataset.placeholder) this.textContent = '';
